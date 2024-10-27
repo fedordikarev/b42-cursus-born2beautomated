@@ -6,7 +6,7 @@ apt install -y tmux libpam-pwquality ufw
 cat <<'EOF' | tee /etc/sudoers.d/sudo_config
 Defaults	passwd_tries=3
 Defaults	badpass_message="I dont think so, try again"
-Defaults	log_file="/var/log/sudo/sudo.log"
+Defaults	logfile="/var/log/sudo/sudo.log"
 Defaults	log_input, log_output
 Defaults	iolog_dir="/var/log/sudo"
 Defaults	requiretty
