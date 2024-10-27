@@ -16,7 +16,7 @@ default auto
 autoselect auto
 label auto
 	menu default
-	menu label a^Utomated Install
+	menu label v2024.10.27_21:08 a^Utomated Install
 	kernel /install.amd/vmlinuz
 	append initrd=/install.amd/initrd.gz preseed/file=/cdrom/preseed/preseed.cfg language=en country=DE locale=en_US.UTF-8 keymap=us
 EOF
@@ -24,3 +24,7 @@ EOF
 chmod +w "${menu_cfg}"
 sed -i -e '/include gtk.cfg/d' -e '/include spkgtk.cfg/d' -e '/include spk.cfg/d' "${menu_cfg}"
 chmod -w "${menu_cfg}"
+
+mkdir "${out_folder}/files"
+cp /post_install.sh "${out_folder}/files"
+chmod -w -R "${out_folder}/files"

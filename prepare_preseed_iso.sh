@@ -1,8 +1,8 @@
 #!/bin/bash
 
-src_iso="$HOME/iso/debian-12.6.0-amd64-netinst.iso"
+src_iso="$HOME/iso/debian-12.7.0-amd64-netinst.iso"
 tmp_folder="$HOME/goinfre/tmp-iso-output"
-preseed_cfg="$HOME/b42/cursus/born2beroot/preseed.cfg"
+preseed_cfg="./preseed.cfg"
 dest_folder="$HOME/goinfre/iso-output"
 
 [ -d "$tmp_folder" ] || mkdir "$tmp_folder"
@@ -12,6 +12,7 @@ docker run \
 	--mount "type=bind,src=${tmp_folder},target=/output" \
 	--mount "type=bind,src=${preseed_cfg},target=/preseed.cfg" \
 	--mount "type=bind,src=./install_preseed_to_iso.sh,target=/install_preseed_to_iso.sh" \
+	--mount "type=bind,src=./post_install.sh,target=/post_install.sh" \
 	yatheo/xorriso:v0.1 \
 		bash -c "bsdtar --preserve-permissions --extract --file /debian.iso --directory /output && bash /install_preseed_to_iso.sh"
 		# bash -c "bash /install_preseed_to_iso.sh"
