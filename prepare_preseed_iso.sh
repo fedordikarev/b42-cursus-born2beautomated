@@ -14,6 +14,7 @@ docker run \
 	--mount "type=bind,src=./install_preseed_to_iso.sh,target=/install_preseed_to_iso.sh" \
 	yatheo/xorriso:v0.1 \
 		bash -c "bsdtar --preserve-permissions --extract --file /debian.iso --directory /output && bash /install_preseed_to_iso.sh"
+		# bash -c "bash /install_preseed_to_iso.sh"
 		
 
 mkdir -p "${dest_folder}"
