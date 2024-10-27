@@ -1,9 +1,9 @@
 #!/bin/sh
 
 apt update
-apt install -y tmux libpam-pwquality
+apt install -y tmux libpam-pwquality ufw
 
-cat <<EOF | tee /etd/sudoers/sudo_config
+cat <<'EOF' | tee /etc/sudoers.d/sudo_config
 Defaults	passwd_tries=3
 Defaults	badpass_message="I dont think so, try again"
 Defaults	log_file="/var/log/sudo/sudo.log"
@@ -19,16 +19,22 @@ sed -i \
 	-e 's/PASS_WARN_AGE.*/PASS_WARN_AGE 7/' \
 	/etc/login.defs
 
+chage -m 2 -M 30 fdikarev
+chage -m 2 -M 30 root
+
 sed -i \
 	-e 's/.*pam_pwquality.*/password	requisite	pam_pwquality.so retry=3 minlen=10 ucredit=-1 dcredit=-1 lcredit=-1 maxrepeat=3 reject_username difok=7 enfoce_for_root/' \
 	/etc/pam.d/common-password
 
 sed -i \
-	-e 's/#Port 22/Port 4242' \
+	-e 's/#Port 22/Port 4242/' \
 	-e 's/#PermitRootLogin .*/PermitRootLogin no/' \
 	/etc/ssh/sshd_config
 
-cat <<EOF | tee /usr/local/bin/monitoring.sh
+ufw allow 4242
+ufw enable
+
+cat <<'EOF' | tee /usr/local/bin/monitoring.sh
 #!/bin/bash
 
 # ARCH
@@ -46,7 +52,7 @@ ram_use=$(free --mega | awk '$1 == "Mem:" {print $3}')
 ram_percent=$(( ram_use * 100 / ram_total ))
 
 # DISK
-disk_total=$(df -m | grep "/dev/" | grep -v "/boot" | awk '{disk_t += $2} END {printf ("%.1fGb\n"), disk_t/1024}')
+disk_total=$(df -m | grep "/dev/" | grep -v "/boot" | awk '{disk_t += $2} END {print disk_t}')
 disk_use=$(df -m | grep "/dev/" | grep -v "/boot" | awk '{disk_u += $3} END {print disk_u}')
 disk_percent=$(( disk_use * 100 / disk_total ))
 
