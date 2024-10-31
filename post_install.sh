@@ -23,7 +23,7 @@ chage -m 2 -M 30 fdikarev
 chage -m 2 -M 30 root
 
 sed -i \
-	-e 's/.*pam_pwquality.*/password	requisite	pam_pwquality.so retry=3 minlen=10 ucredit=-1 dcredit=-1 lcredit=-1 maxrepeat=3 reject_username difok=7 enfoce_for_root/' \
+	-e 's/.*pam_pwquality.*/password	requisite	pam_pwquality.so retry=3 minlen=10 ucredit=-1 dcredit=-1 lcredit=-1 maxrepeat=3 reject_username difok=7 enforce_for_root/' \
 	/etc/pam.d/common-password
 
 sed -i \
